@@ -3,6 +3,7 @@ package com.estudos.chooselargestnumber
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import com.estudos.chooselargestnumber.databinding.ActivityMainBinding
 import java.util.*
 
@@ -16,24 +17,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         pickRandomNumbers()
+        setupClickListeners()
     }
 
-    fun leftButtonClick(view: View) {
-        checkIfCorrectAnswer(isLeft = true)
+    private fun setupClickListeners() {
+        with(binding) {
+            leftButton.setOnClickListener { checkIfCorrectAnswer(true) }
+            rightButton.setOnClickListener { checkIfCorrectAnswer(false) }
+            resetButton.setOnClickListener { resetPoints() }
+        }
     }
-
-    fun rightButtonClick(view: View) {
-        checkIfCorrectAnswer(isLeft = false)
-    }
-
-    fun resetButtonClick(view: View) {
-
-    }
-
-
 
     private fun resetPoints() {
         binding.points.text = "Points: 0"
+        points = 0
     }
 
 
@@ -43,8 +40,10 @@ class MainActivity : AppCompatActivity() {
 
         if (isLeft && leftNum > rightNum || !isLeft && leftNum < rightNum) {
             points++
+            Toast.makeText(this, "You got it!", Toast.LENGTH_SHORT).show()
         } else {
             points--
+            Toast.makeText(this, "Oh no!", Toast.LENGTH_SHORT).show()
         }
         binding.points.text = "Points: $points"
         pickRandomNumbers()
